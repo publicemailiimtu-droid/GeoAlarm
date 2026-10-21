@@ -89,6 +89,85 @@ void main() {
       },
     );
 
+    test(
+      'copyWith() preserves untouched fields and allows updating fields',
+      () {
+        const original = AlarmRule(
+          id: '10',
+          title: 'Original Alarm',
+          isEnabled: true,
+          triggerType: TriggerType.time,
+          timeHour: 9,
+          timeMinute: 15,
+          latitude: 12.34,
+          longitude: 56.78,
+          radiusMeters: 100,
+          locationName: 'Home',
+        );
+
+        final updated = original.copyWith(
+          title: 'Updated Title',
+          isEnabled: false,
+        );
+
+        expect(updated.id, equals('10'));
+        expect(updated.title, equals('Updated Title'));
+        expect(updated.isEnabled, isFalse);
+        expect(updated.triggerType, equals(TriggerType.time));
+        expect(updated.timeHour, equals(9));
+        expect(updated.timeMinute, equals(15));
+        expect(updated.latitude, equals(12.34));
+        expect(updated.longitude, equals(56.78));
+        expect(updated.radiusMeters, equals(100));
+        expect(updated.locationName, equals('Home'));
+      },
+    );
+
+    test('copyWith() allows explicitly clearing nullable fields to null', () {
+      const original = AlarmRule(
+        id: '11',
+        title: 'Full Alarm',
+        triggerType: TriggerType.timeAndLocation,
+        timeHour: 8,
+        timeMinute: 30,
+        latitude: 37.7749,
+        longitude: -122.4194,
+        radiusMeters: 200,
+        locationName: 'Office',
+      );
+
+      final cleared = original.copyWith(
+        timeHour: null,
+        timeMinute: null,
+        latitude: null,
+        longitude: null,
+        radiusMeters: null,
+        locationName: null,
+      );
+
+      expect(cleared.id, equals('11'));
+      expect(cleared.title, equals('Full Alarm'));
+      expect(cleared.timeHour, isNull);
+      expect(cleared.timeMinute, isNull);
+      expect(cleared.latitude, isNull);
+      expect(cleared.longitude, isNull);
+      expect(cleared.radiusMeters, isNull);
+      expect(cleared.locationName, isNull);
+    });
+
+    test('fromJson() throws FormatException for invalid triggerType', () {
+      final invalidJson = {
+        'id': '99',
+        'title': 'Bad Json Alarm',
+        'triggerType': 'unknownType',
+      };
+
+      expect(
+        () => AlarmRule.fromJson(invalidJson),
+        throwsA(isA<FormatException>()),
+      );
+    });
+
     test('AlarmRule toJson and fromJson roundtrip correctly', () {
       const original = AlarmRule(
         id: '7',

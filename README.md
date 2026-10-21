@@ -3,6 +3,7 @@
 GeoAlarm is an Android-first alarm and reminder app that can trigger from **time**, **location**, or a combination of both.
 
 > **Status:** Phase 1 — Scaffold, data models, Material 3 UI, and CI foundation.
+> **Notice:** Location triggers, background execution, and real alarm reliability are not implemented or validated on real devices yet.
 
 ## Product goals
 
@@ -50,6 +51,7 @@ flutter run
 - Ask for only the permissions required by features the user enables.
 - Explain background location use before requesting it.
 - Do not commit API keys, signing keys, personal location data, or secrets.
+- Location triggers, background geofencing, and notification reliability are not yet implemented or validated on real Android devices.
 - Geofence and notification behavior can vary by Android version, device vendor, battery settings, and permission state. Document limitations and test on-device.
 
 ## Project docs

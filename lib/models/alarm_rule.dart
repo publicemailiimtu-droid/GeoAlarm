@@ -15,6 +15,8 @@ enum TriggerType {
       this == TriggerType.timeOrLocation;
 }
 
+const Object _absent = Object();
+
 class AlarmRule {
   final String id;
   final String title;
@@ -85,24 +87,28 @@ class AlarmRule {
     String? title,
     bool? isEnabled,
     TriggerType? triggerType,
-    int? timeHour,
-    int? timeMinute,
-    double? latitude,
-    double? longitude,
-    double? radiusMeters,
-    String? locationName,
+    Object? timeHour = _absent,
+    Object? timeMinute = _absent,
+    Object? latitude = _absent,
+    Object? longitude = _absent,
+    Object? radiusMeters = _absent,
+    Object? locationName = _absent,
   }) {
     return AlarmRule(
       id: id ?? this.id,
       title: title ?? this.title,
       isEnabled: isEnabled ?? this.isEnabled,
       triggerType: triggerType ?? this.triggerType,
-      timeHour: timeHour ?? this.timeHour,
-      timeMinute: timeMinute ?? this.timeMinute,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      radiusMeters: radiusMeters ?? this.radiusMeters,
-      locationName: locationName ?? this.locationName,
+      timeHour: timeHour == _absent ? this.timeHour : timeHour as int?,
+      timeMinute: timeMinute == _absent ? this.timeMinute : timeMinute as int?,
+      latitude: latitude == _absent ? this.latitude : latitude as double?,
+      longitude: longitude == _absent ? this.longitude : longitude as double?,
+      radiusMeters: radiusMeters == _absent
+          ? this.radiusMeters
+          : radiusMeters as double?,
+      locationName: locationName == _absent
+          ? this.locationName
+          : locationName as String?,
     );
   }
 
@@ -122,14 +128,20 @@ class AlarmRule {
   }
 
   factory AlarmRule.fromJson(Map<String, dynamic> json) {
+    final rawTriggerType = json['triggerType'];
+    final triggerType = TriggerType.values.firstWhere(
+      (e) => e.name == rawTriggerType,
+      orElse: () => throw FormatException(
+        'Invalid triggerType "$rawTriggerType" in JSON. Allowed values are: '
+        '${TriggerType.values.map((e) => e.name).join(', ')}',
+      ),
+    );
+
     return AlarmRule(
       id: json['id'] as String,
       title: json['title'] as String,
       isEnabled: json['isEnabled'] as bool? ?? true,
-      triggerType: TriggerType.values.firstWhere(
-        (e) => e.name == json['triggerType'],
-        orElse: () => TriggerType.time,
-      ),
+      triggerType: triggerType,
       timeHour: json['timeHour'] as int?,
       timeMinute: json['timeMinute'] as int?,
       latitude: (json['latitude'] as num?)?.toDouble(),
