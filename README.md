@@ -2,7 +2,7 @@
 
 GeoAlarm is an Android-first alarm and reminder app that can trigger from **time**, **location**, or a combination of both.
 
-> **Status:** Planning / initial scaffold. Location triggers, background execution, and alarm reliability must be validated on real Android devices before any production claim.
+> **Status:** Phase 1 — Scaffold, data models, Material 3 UI, and CI foundation.
 
 ## Product goals
 
@@ -16,32 +16,34 @@ GeoAlarm is an Android-first alarm and reminder app that can trigger from **time
 ## Planned stack
 
 - **Flutter + Dart** for the mobile app.
-- Android location/geofencing and notification integrations, selected after a platform feasibility spike.
+- Android location/geofencing and notification integrations.
 - Local persistence for alarms and saved places.
 - Automated formatting, static analysis, and unit tests in CI.
 
-## MVP scope
+## Development and testing
 
-1. App shell and alarm data model.
-2. Create/edit/delete alarms and local persistence.
-3. Time schedules and notifications.
-4. Location picker and arrival/departure geofences.
-5. Combined time + location conditions (explicit AND/OR setting).
-6. Repeat rules, snooze, permission education, and reliability tests.
+Prerequisite: Install [Flutter SDK](https://docs.flutter.dev/get-started/install) (Flutter 3.x / Dart 3.x).
 
-## Development
-
-Install the Flutter SDK, then run:
+Run the following exact commands to install dependencies, format code, analyze, run unit tests, and start the app:
 
 ```sh
-flutter doctor
+# 1. Install dependencies
 flutter pub get
+
+# 2. Check and apply code formatting
+dart format --output=none --set-exit-if-changed .
+# Or to format all files in place:
+# dart format .
+
+# 3. Run static code analysis
 flutter analyze
+
+# 4. Run unit and widget tests
 flutter test
+
+# 5. Run the application
 flutter run
 ```
-
-These commands become usable after the Flutter application scaffold is committed.
 
 ## Privacy and reliability
 
